@@ -1,5 +1,4 @@
 export const request = async (url, method, body) => {
-    console.log(body);
     if(method && method == "POST") {
         return fetch(url, {
             method: "POST",

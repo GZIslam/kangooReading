@@ -46,7 +46,6 @@ const wordClick = (obj, el) => {
                 targetLanguageCode: /[a-zA-Z]/.test(obj.value)? "ru" : "en"
             })
         .then(res => {
-            console.log(res);
             translateElement.innerHTML = `<p>Перевод: ${res.translations[0].text}</p>`;
             helper.append(translateElement);
             currentHelper.helper = helper;
