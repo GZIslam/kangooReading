@@ -7,11 +7,15 @@ let currentHelper = {};
 const myWordClick = (obj, el) => {
     if(currentHelper?.parent == el) {
         currentHelper.helper.remove();
+        currentHelper.parent.classList.remove("is-active");
         currentHelper = {};
         return;
     }
 
-    if(currentHelper?.helper) currentHelper.helper.remove();
+    if(currentHelper?.helper) {
+        currentHelper.helper.remove();
+        currentHelper.parent.classList.remove("is-active");
+    }
 
     let helper = document.createElement("div");
     helper.classList.add("helper");
@@ -22,6 +26,7 @@ const myWordClick = (obj, el) => {
     helper.append(translateElement);
     currentHelper.helper = helper;
     currentHelper.parent = el;
+    currentHelper.parent.classList.add("is-active");
 
     el.append(helper);
 };
@@ -32,7 +37,10 @@ const wordClick = (obj, el) => {
         return;
     }
 
-    if(currentHelper?.helper) currentHelper.helper.remove();
+    if(currentHelper?.helper) {
+        currentHelper.helper.remove();
+        currentHelper.parent.classList.remove("is-active");
+    }
 
     let helper = document.createElement("div");
     helper.classList.add("helper");
@@ -50,12 +58,13 @@ const wordClick = (obj, el) => {
             helper.append(translateElement);
             currentHelper.helper = helper;
             currentHelper.parent = el;
+            currentHelper.parent.classList.add("is-active");
 
             el.append(helper);
         })
 };
 
-export const Reader = (text) => {
+export const Reader = (text, helperController) => {
     let element = document.createElement("div");
     element.classList.add("reader");
 
@@ -69,26 +78,27 @@ export const Reader = (text) => {
 
     array = request("http://185.231.247.155:5000/api/words/reader", "POST", {words: array}).then(res => {
         res.reader.forEach(word => {
-            let item = document.createElement("div");
+            let typeElement = document.createElement("div");
             let wordElement = document.createElement("p");
             let box = document.createElement('div');
 
             box.classList.add("box");
-            item.classList.add("item");
+            typeElement.classList.add("type");
             switch (word.itemType) {
                 case 0:
                     if(word.value == "\n") {
                         let br = document.createElement("div");
                         br.classList.add("br");
                         brAppended = true;
-                        element.append(br);
+                        box = br;
                     } else {
                         wordElement.innerText = word.value;
-                        item.classList.add("word");
+                        box.classList.add("word");
                         box.title = "Перевести?";
 
                         if(brAppended) {
-                            box.style.marginLeft = "60px";
+                            // TODO =>
+                            // box.style.marginLeft = "60px";
                             brAppended = false;
                         }
 
@@ -97,11 +107,11 @@ export const Reader = (text) => {
                     break;
                 case 1:
                     wordElement.innerText = word.value;
-                    item.style.backgroundColor = colors[colorIndex];
+                    typeElement.style.backgroundColor = colors[colorIndex];
                     colorIndex++;
                     if(colorIndex == colors.length) colorIndex = 0;
 
-                    item.classList.add("word");
+                    box.classList.add("word");
 
                     if(brAppended) {
                         box.style.marginLeft = "60px";
@@ -116,12 +126,18 @@ export const Reader = (text) => {
                         box.style.marginLeft = "60px";
                         brAppended = false;
                     }
-                    item.classList.add("symbol");
+                    box.classList.add("symbol");
                     break;
             }
-            items.push(item);
-            box.append(item);
+            items.push(typeElement);
+            box.append(typeElement);
             box.append(wordElement);
+
+            helperController.addEventListener("change", () => {
+                element.changeOpacity(+helperController.value);
+            });
+            element.changeOpacity(+helperController.value);
+
             element.append(box);
         });
     });
@@ -129,6 +145,7 @@ export const Reader = (text) => {
     document.body.addEventListener("click", (e) => {
         if(currentHelper?.helper && !e.target.classList.contains("box")) {
             currentHelper.helper.remove();
+            currentHelper.parent.classList.remove("is-active");
             currentHelper = {};
         }
     });

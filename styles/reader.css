@@ -5,25 +5,27 @@
 }
 
 .reader .box {
-    margin: 0 6px 6px 0;
+    /* margin: 0 6px 6px 0; */
+    margin-bottom: 6px;
     font-size: 18px;
     color: rgb(44, 44, 44);
     position: relative;
-    padding: 4px;
+    padding: 4px 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-    
     border-radius: 4px;
     cursor: pointer;
+
+    border: 1px solid transparent;
 }
 
-.reader .box .item {
+.reader .box .type {
     width: 100%;
     height: 100%;
     position: absolute;
     z-index: -1;
-    
+    pointer-events: none;
     border-radius: 4px;
 }
 
@@ -33,20 +35,26 @@
     pointer-events: none;
 }
 
-.reader .box:hover {
-    -webkit-box-shadow: 0px 0px 11px 2px rgba(34, 60, 80, 0.2);
-    -moz-box-shadow: 0px 0px 11px 2px rgba(34, 60, 80, 0.2);
-    box-shadow: 0px 0px 11px 2px rgba(34, 60, 80, 0.2);
+.reader .box.is-active {
+    border: 1px solid #ffb900;
 }
 
-.reader .box .item.word {
-    padding: 4px 6px;
+.reader .box:hover {
+    /* -webkit-box-shadow: 0px 0px 11px 2px rgba(34, 60, 80, 0.2);
+    -moz-box-shadow: 0px 0px 11px 2px rgba(34, 60, 80, 0.2);
+    box-shadow: 0px 0px 11px 2px rgba(34, 60, 80, 0.2); */
+
+    /* filter: brightness(93%); */
+    /* opacity: 1; */
+    border: 1px solid #ffb900;
+}
+
+.reader .box.word .type{
     background: rgb(240 240 240)
 }
 
-.reader .box .item.symbol {
-    padding: 4px;
-    background: rgb(212, 212, 212);
+.reader .box.symbol {
+    padding: 4px 2px;
 }
 
 .reader .br {
@@ -55,7 +63,7 @@
 }
 
 .reader .box .helper {
-    z-index: 9999;
+    z-index: 999;
     border-radius: 4px;
     position: absolute;
     width: max-content;

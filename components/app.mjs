@@ -12,7 +12,7 @@ export const App = () => {
     helperOpacityController.min = 0;
     helperOpacityController.max = 100;
     helperOpacityController.step = 1;
-    helperOpacityController.value = 100;
+    helperOpacityController.value = 50;
     
     controls.classList.add("controls");
     readerPlace.classList.add("reader-place");
@@ -45,22 +45,10 @@ export const App = () => {
         if(textArea.value) {
             if(reader) {
                 reader.remove();
-                reader = Reader(textArea.value);
-                header.classList.add("is-active");
-                readerPlace.append(reader);
-
-                helperOpacityController.addEventListener("change", () => {
-                    reader.changeOpacity(helperOpacityController.value);
-                });
-            } else {
-                reader = Reader(textArea.value);
-                header.classList.add("is-active");
-                readerPlace.append(reader);
-
-                helperOpacityController.addEventListener("change", () => {
-                    reader.changeOpacity(helperOpacityController.value);
-                });
             }
+            reader = Reader(textArea.value, helperOpacityController);
+            header.classList.add("is-active");
+            readerPlace.append(reader);
         }
     });
 
