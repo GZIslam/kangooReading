@@ -33,6 +33,7 @@ const myWordClick = (obj, el) => {
 const wordClick = (obj, el) => {
     if(currentHelper?.parent == el) {
         currentHelper.helper.remove();
+        currentHelper.parent.classList.remove("is-active");
         currentHelper = {};
         return;
     }
